@@ -16,6 +16,9 @@ This project holds all the command line utilities for interacting with bullhorn
 
   > mvn package
 
+* Adjust properties in application.properties
+
 * Execute the java code
 
   > java -jar BHUtils-0.0.1-SNAPSHOT.jar com.$314e.bullhorn.`<classname>`
+

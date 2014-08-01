@@ -2,5 +2,6 @@
 
 <configuration>
 	<system />
-	<properties fileName="application.properties" />
+	<properties fileName="bhapi.properties" />
+	<properties basePath="." fileName="application.properties" />
 </configuration>
