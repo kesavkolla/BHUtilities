@@ -30,6 +30,7 @@ public class MassUpdater {
 	private static BHRestApi.Entity entityApi;
 	
 
+	
 	public static void main(final String... args) throws Exception {
 		
 		
@@ -39,7 +40,7 @@ public class MassUpdater {
 		
 		
 		
-		
+		//Get the information from the property files
 		logger.entry();
 		final DefaultConfigurationBuilder factory = new DefaultConfigurationBuilder("META-INF/config.xml");
 		config = factory.getConfiguration();
@@ -55,11 +56,11 @@ public class MassUpdater {
 		entityApi = BHRestUtil.getEntityApi(token);
 		
 		
+		// retrieve all the entity ids from the csv file and put into a list
 		
 		Scanner scanner = new Scanner(new File((String) config.getProperty("datafile")));
 		
 		final ObjectNode data = new ObjectNode(JsonNodeFactory.instance);
-		ObjectNode node = new ObjectNode(JsonNodeFactory.instance);
 	
 		final ArrayNode ids =  data.putArray("ids");
 		
@@ -84,15 +85,24 @@ public class MassUpdater {
 		}
 		scanner.close();
 		
-		
+		//Convert the list of String ids to integers
 		for(int i = list.size()-1; i>=0; i--) {
 			 list.set(i,  Integer.parseInt((String) list.get(i).toString().substring(1, list.get(i).toString().length()-1)));
 			ids.add( (int) list.get(i));
 		}
 		
+		//Get the fieldname and value from the property file
 		String fieldName = (String) config.getProperty("fieldName");
 		Object fieldValue = config.getProperty("fieldValue");
 		
+		//Check to see if the value from the property file is a string or an int
+		if ((int) fieldValue.toString().charAt(0) >= 48 && (int) fieldValue.toString().charAt(0) <= 57) {
+			fieldValue = (long) fieldValue;
+		} else {
+			fieldValue = (String) fieldValue;
+		}
+		
+		//put the value in the data to be updated
 		data.put((String) config.getProperty("fieldName"), (String) config.getProperty("fieldValue"));
 		System.out.println(data);
 		
@@ -102,7 +112,7 @@ public class MassUpdater {
 
 		
 		
-		
+		// Case to determine whether the entity field is supported by massupdate. If it is not, then have to update each candidate individually
 		System.out.println(data);
 		if (fieldName.equals("status") || fieldName.equals("businessSectors") || fieldName.equals("categories") || fieldName.equals("isDeleted") || fieldName.equals("owner") || fieldName.equals("primarySkills") ||
 				fieldName.equals("source") || fieldName.equals("specialties")) {
