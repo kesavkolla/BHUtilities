@@ -32,7 +32,8 @@ public class MassUpdater {
 	private static String restToken;
 	private static BHRestApi.Entity entityApi;
 
-	public static void main(final String... args) throws Exception {
+	public static void main(final String... args) {
+		try {
 		
 		List<String> candidateids = null;
 		final Path candidateFile = FileSystems.getDefault().getPath("candidate.list");
@@ -165,6 +166,8 @@ public class MassUpdater {
 			// Delete the file candidate.list
 			Files.deleteIfExists(candidateFile);
 		}
-
+		} catch (final Exception ex) {
+			System.exit(10);
+		}
 	}
 }
