@@ -1,9 +1,16 @@
 package com.$314e.bullhorn;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.configuration.Configuration;
@@ -26,6 +33,14 @@ public class MassUpdater {
 	private static BHRestApi.Entity entityApi;
 
 	public static void main(final String... args) throws Exception {
+		
+		List<String> candidateids = null;
+		final Path candidateFile = FileSystems.getDefault().getPath("candidate.list");
+		if (Files.exists(candidateFile)) {
+			candidateids = Files.readAllLines(candidateFile);
+		} else {
+			candidateids = new ArrayList<>();
+		}
 
 		// Get the information from the property files
 		logger.entry();
@@ -55,12 +70,12 @@ public class MassUpdater {
 
 		final ArrayNode ids = data.putArray("ids");
 
-		ArrayList list = new ArrayList();
+		ArrayList<Object> list = new ArrayList<Object>();
 
 		scanner.useDelimiter(",");
 		scanner.nextLine();
 		scanner.nextLine();
-		try {
+		try { 
 		while (scanner.hasNext()) {
 			if (scanner.hasNextInt()) {
 				list.add(scanner.nextInt());
@@ -106,7 +121,9 @@ public class MassUpdater {
 		// massupdate. If it is not, then have to update each candidate
 		// individually
 		System.out.println(data);
-		if (fieldName.equals("status") || fieldName.equals("businessSectors")
+		final BufferedWriter writer = Files.newBufferedWriter(candidateFile, Charset.forName("US-ASCII"),
+				StandardOpenOption.CREATE);
+		if (fieldName.equals("statuss") || fieldName.equals("businessSectors")
 				|| fieldName.equals("categories")
 				|| fieldName.equals("isDeleted") || fieldName.equals("owner")
 				|| fieldName.equals("primarySkills")
@@ -130,6 +147,9 @@ public class MassUpdater {
 
 		} else {
 			for (int index = 0; index < list.size(); index++) {
+				if(candidateids.contains(list.get(index).toString())) {
+					continue;
+				}
 				ObjectNode candidate = entityApi.get(
 						BHRestApi.Entity.ENTITY_TYPE.valueOf(entity),
 						restToken, list.get(index), fieldName + ", id");
@@ -137,7 +157,13 @@ public class MassUpdater {
 						restToken, list.get(index), ((ObjectNode) candidate
 								.path("data")).put(fieldName,
 								(String) fieldValue));
+				writer.write(list.get(index).toString());
+				writer.newLine();
+				writer.flush();
 			}
+			writer.close();
+			// Delete the file candidate.list
+			Files.deleteIfExists(candidateFile);
 		}
 
 	}
