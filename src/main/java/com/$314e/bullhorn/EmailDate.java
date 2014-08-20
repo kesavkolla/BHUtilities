@@ -114,7 +114,7 @@ public class EmailDate extends BaseUtil {
 		int count = 0;
 
 		final BufferedWriter writer = Files.newBufferedWriter(candidatefile, Charset.forName("US-ASCII"),
-				StandardOpenOption.CREATE);
+				StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
 		// Run through each candidate
 		for (int index = 0, size = candidates.path("total").intValue(); index < size; index++) {
