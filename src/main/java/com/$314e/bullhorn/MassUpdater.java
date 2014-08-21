@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class MassUpdater {
-	private static Logger logger = LogManager.getLogger(MassUpdater.class);
+	private static Logger LOGGER = LogManager.getLogger(MassUpdater.class);
 	private static Configuration config;
 
 	private static ObjectNode token;
@@ -44,14 +44,14 @@ public class MassUpdater {
 			}
 
 			// Get the information from the property files
-			logger.entry();
+			LOGGER.entry();
 			final DefaultConfigurationBuilder factory = new DefaultConfigurationBuilder("META-INF/config.xml");
 			config = factory.getConfiguration();
 			for (final Iterator<String> ite = config.getKeys(); ite.hasNext();) {
 				final String key = ite.next();
-				logger.debug("{}: {}", key, config.getProperty(key));
+				LOGGER.debug("{}: {}", key, config.getProperty(key));
 			}
-			logger.exit();
+			LOGGER.exit();
 
 			token = BHRestUtil.getRestToken((String) config.getProperty("BH_CLIENT_ID"),
 					(String) config.getProperty("BH_CLIENT_SECRET"), (String) config.getProperty("BH_USER"),

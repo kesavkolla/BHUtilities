@@ -10,14 +10,14 @@ import com.$314e.bhrestapi.BHRestUtil;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class BaseUtil {
-	private static final Logger logger = LogManager.getLogger(BaseUtil.class);
+	private static final Logger LOGGER = LogManager.getLogger(BaseUtil.class);
 	private Configuration config;
 
 	private String restToken;
 	private BHRestApi.Entity entityApi;
 
 	public BaseUtil() throws Exception {
-		logger.entry();
+		LOGGER.entry();
 		final DefaultConfigurationBuilder factory = new DefaultConfigurationBuilder("META-INF/config.xml");
 		config = factory.getConfiguration();
 		final ObjectNode token = BHRestUtil.getRestToken((String) config.getProperty("BH_CLIENT_ID"),
@@ -25,8 +25,8 @@ public class BaseUtil {
 				(String) config.getProperty("BH_PASSWORD"));
 		this.restToken = token.get("BhRestToken").asText();
 		this.entityApi = BHRestUtil.getEntityApi(token);
-		logger.debug("Done with initializing BHRestAPI");
-		logger.exit();
+		LOGGER.debug("Done with initializing BHRestAPI");
+		LOGGER.exit();
 	}
 
 	protected Configuration getConfig() {

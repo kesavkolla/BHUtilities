@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class WeeklyNoteUpdate extends BaseUtil {
 
-	private static final Logger logger = LogManager.getLogger(WeeklyNoteUpdate.class);
+	private static final Logger LOGGER = LogManager.getLogger(WeeklyNoteUpdate.class);
 	private final Configuration appConfig;
 
 	public WeeklyNoteUpdate() throws Exception {
@@ -36,7 +36,7 @@ public class WeeklyNoteUpdate extends BaseUtil {
 	}
 
 	private void doUpdate() throws Exception {
-		logger.entry();
+		LOGGER.entry();
 
 		List<String> candidateids = null;
 		final Path candidatefile = FileSystems.getDefault().getPath("candidates.list");
@@ -48,7 +48,7 @@ public class WeeklyNoteUpdate extends BaseUtil {
 
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		final String lastWeek = LocalDate.now().minusDays(9).format(DateTimeFormatter.ISO_LOCAL_DATE);
-		logger.debug("finding notes from: {}", lastWeek);
+		LOGGER.debug("finding notes from: {}", lastWeek);
 
 		final StringBuilder query = new StringBuilder();
 		query.append("select personReferenceID, max(dateAdded) maxdate from dbo.Note")
@@ -69,7 +69,7 @@ public class WeeklyNoteUpdate extends BaseUtil {
 					continue;
 				}
 				final Date maxdate = rs.getDate("maxdate");
-				logger.debug("Updating customtext2 of candidate:{} with date:{}", candidateId, maxdate);
+				LOGGER.debug("Updating customtext2 of candidate:{} with date:{}", candidateId, maxdate);
 				final ObjectNode data = JsonNodeFactory.instance.objectNode();
 
 				data.put("customDate2", maxdate.getTime());
@@ -77,7 +77,7 @@ public class WeeklyNoteUpdate extends BaseUtil {
 				try {
 					final ObjectNode result = getEntityApi().update(BHRestApi.Entity.ENTITY_TYPE.CANDIDATE,
 							getRestToken(), candidateId, data);
-					logger.debug(result);
+					LOGGER.debug(result);
 					writer.write("" + candidateId);
 					writer.newLine();
 					writer.flush();
@@ -91,14 +91,14 @@ public class WeeklyNoteUpdate extends BaseUtil {
 			Files.delete(candidatefile);
 		}
 
-		logger.exit();
+		LOGGER.exit();
 	}
 
 	public static void main(final String... args) {
 		try {
 			new WeeklyNoteUpdate();
 		} catch (final Throwable th) {
-			logger.error("Error in WeeklyNoteUpdate", th);
+			LOGGER.error("Error in WeeklyNoteUpdate", th);
 			System.exit(10);
 		}
 	}

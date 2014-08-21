@@ -38,7 +38,7 @@ import com.google.api.services.gmail.model.MessagePartHeader;
 
 public class EmailDate extends BaseUtil {
 
-	private static final Logger logger = LogManager.getLogger(EmailDate.class);
+	private static final Logger LOGGER = LogManager.getLogger(EmailDate.class);
 
 	private static final String APP_NAME = "Gmail API Quickstart";
 	private static final File DATA_STORE_DIR = new File(System.getProperty("user.home"), ".store/gmail");
@@ -65,7 +65,7 @@ public class EmailDate extends BaseUtil {
 		ObjectNode candidates = getEntityApi().search(BHRestApi.Entity.ENTITY_TYPE.CANDIDATE, getRestToken(),
 				"isDeleted:0 AND NOT status:archive", "email, email2, email3, customDate1, id", "+id", 500, start);
 
-		logger.debug(candidates);
+		LOGGER.debug(candidates);
 
 		ObjectNode updates;
 
@@ -75,7 +75,7 @@ public class EmailDate extends BaseUtil {
 		final HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 		final FileDataStoreFactory dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
 
-		logger.debug("Loading secret from: {}", this.getClass().getResource("/client_secret.json"));
+		LOGGER.debug("Loading secret from: {}", this.getClass().getResource("/client_secret.json"));
 		final GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(this
 				.getClass().getResourceAsStream("/client_secret.json")));
 
@@ -92,7 +92,7 @@ public class EmailDate extends BaseUtil {
 
 		final Credential auth = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 
-		logger.debug("Auth expiriation: {}", auth.getExpiresInSeconds());
+		LOGGER.debug("Auth expiriation: {}", auth.getExpiresInSeconds());
 
 		final Credential credential = auth;
 
@@ -118,7 +118,7 @@ public class EmailDate extends BaseUtil {
 
 		// Run through each candidate
 		for (int index = 0, size = candidates.path("total").intValue(); index < size; index++) {
-			logger.debug("index: {} ", index);
+			LOGGER.debug("index: {} ", index);
 
 			if (index % 500 == 0 && index != 0) {
 				start += 500;
@@ -173,7 +173,7 @@ public class EmailDate extends BaseUtil {
 						.setQ("in:inbox (from:" + "(+" + email + ") OR from:" + "(+" + email2 + ") OR from:" + "(+"
 								+ email3 + ")) after:" + queryDateString).execute();
 			} else if (email == "" && email2 == "" && (email3 == "" || email3.equals("Not Applicable"))) {
-				logger.info(candidates.path("data").get(count).path("id"));
+				LOGGER.info(candidates.path("data").get(count).path("id"));
 				count++;
 				continue;
 			} else {
@@ -205,13 +205,13 @@ public class EmailDate extends BaseUtil {
 
 			if (list != null) {
 
-				logger.debug(messages);
+				LOGGER.debug(messages);
 
 				// Go through the messages of the candidate
 
 				for (final Message msgId : messages) {
-					logger.debug("candidate id: {} ", candidates.path("data").get(count).path("id"));
-					logger.debug("############################    " + i++ + "    #############################");
+					LOGGER.debug("candidate id: {} ", candidates.path("data").get(count).path("id"));
+					LOGGER.debug("############################    " + i++ + "    #############################");
 
 					final Message message = gmail.users().messages().get("bullhorn@314ecorp.com", msgId.getId())
 							.setFormat("full").execute();
@@ -253,7 +253,7 @@ public class EmailDate extends BaseUtil {
 					}
 
 					parsedDate = dateFormat.parse(date.getValue());
-					logger.debug("{}    {}", parsedDate.getTime(), parsedDate);
+					LOGGER.debug("{}    {}", parsedDate.getTime(), parsedDate);
 
 					time = parsedDate.getTime();
 					// Adjust the date to match local timezone
@@ -298,28 +298,28 @@ public class EmailDate extends BaseUtil {
 							((ObjectNode) toUpdate.path("data")).put("customDate1", time));
 
 					if (from != null) {
-						logger.debug("from: {}", from.toPrettyString());
+						LOGGER.debug("from: {}", from.toPrettyString());
 					}
 
 					if (from2 != null) {
-						logger.debug("from2: {}", from2.toPrettyString());
+						LOGGER.debug("from2: {}", from2.toPrettyString());
 					}
 
 					if (from3 != null) {
-						logger.debug("from3: {}", from3.toPrettyString());
+						LOGGER.debug("from3: {}", from3.toPrettyString());
 					}
 
 					if (to != null) {
-						logger.debug("to: {}", to.toPrettyString());
+						LOGGER.debug("to: {}", to.toPrettyString());
 					}
 
-					logger.debug("date: {}", date.toPrettyString());
+					LOGGER.debug("date: {}", date.toPrettyString());
 					break;
 				}
 
 			}
 			// Write to file
-			logger.debug("count: {}", candidates.path("data").get(count).path("id"));
+			LOGGER.debug("count: {}", candidates.path("data").get(count).path("id"));
 			writer.write(candidates.path("data").get(count).path("id").asText());
 			writer.newLine();
 			writer.flush();
@@ -338,7 +338,7 @@ public class EmailDate extends BaseUtil {
 		try {
 			new EmailDate();
 		} catch (final Exception e) {
-			logger.error("Error in EmailDate", e);
+			LOGGER.error("Error in EmailDate", e);
 			System.exit(10);
 		}
 	}
