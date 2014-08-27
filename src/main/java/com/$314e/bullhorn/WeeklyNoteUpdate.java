@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,11 +26,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class WeeklyNoteUpdate extends BaseUtil {
 
 	private static final Logger LOGGER = LogManager.getLogger(WeeklyNoteUpdate.class);
-	private final Configuration appConfig;
 
 	public WeeklyNoteUpdate() throws Exception {
 		super();
-		this.appConfig = getConfig();
 		doUpdate();
 	}
 
