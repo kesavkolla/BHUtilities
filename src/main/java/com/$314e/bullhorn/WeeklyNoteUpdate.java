@@ -37,12 +37,14 @@ public class WeeklyNoteUpdate extends BaseUtil {
 
 		List<String> candidateids = null;
 		final Path candidatefile = FileSystems.getDefault().getPath("candidates.list");
+		LOGGER.debug(candidatefile.toUri());
+
 		if (Files.exists(candidatefile)) {
 			candidateids = Files.readAllLines(candidatefile);
 		} else {
 			candidateids = new ArrayList<>();
 		}
-
+		LOGGER.debug(candidateids);
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		final String lastWeek = LocalDate.now().minusDays(9).format(DateTimeFormatter.ISO_LOCAL_DATE);
 		LOGGER.debug("finding notes from: {}", lastWeek);
@@ -66,6 +68,7 @@ public class WeeklyNoteUpdate extends BaseUtil {
 					continue;
 				}
 				final Date maxdate = rs.getDate("maxdate");
+
 				LOGGER.debug("Updating customtext2 of candidate:{} with date:{}", candidateId, maxdate);
 				final ObjectNode data = JsonNodeFactory.instance.objectNode();
 
