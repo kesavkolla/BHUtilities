@@ -45,7 +45,6 @@ public class WeeklyNoteUpdate extends BaseUtil {
 			candidateids = new ArrayList<>();
 		}
 		LOGGER.debug(candidateids);
-		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		final String lastWeek = LocalDate.now().minusDays(9).format(DateTimeFormatter.ISO_LOCAL_DATE);
 		LOGGER.debug("finding notes from: {}", lastWeek);
 

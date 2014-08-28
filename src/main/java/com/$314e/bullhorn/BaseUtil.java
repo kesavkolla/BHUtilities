@@ -18,6 +18,7 @@ public class BaseUtil {
 
 	public BaseUtil() throws Exception {
 		LOGGER.entry();
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		final DefaultConfigurationBuilder factory = new DefaultConfigurationBuilder("META-INF/config.xml");
 		appConfig = factory.getConfiguration();
 		final ObjectNode token = BHRestUtil.getRestToken((String) appConfig.getProperty("BH_CLIENT_ID"),

@@ -1,21 +1,26 @@
 package com.$314e.bullhorn;
 
-import java.io.BufferedWriter;
-import java.nio.charset.Charset;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.time.format.DateTimeFormatter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.$314e.bhrestapi.BHRestApi;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+/**
+ * This class updates the candidate status to Passive for all the candidates who
+ * were added to system more than cutoff days and has no email or phone activity
+ * for more than cutoff days
+ * 
+ * @author Kesav Kumar Kolla
+ *
+ */
 public class ActiveCandidates extends BaseUtil {
 
 	private static final Logger LOGGER = LogManager.getLogger(ActiveCandidates.class);
@@ -28,7 +33,6 @@ public class ActiveCandidates extends BaseUtil {
 	private void doUpdate() throws Exception {
 
 		final long cutoff = 90;
-		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		final StringBuilder query = new StringBuilder();
 		// @formatter:off
 		query.append("select userID, firstName, lastName, email, customDate1, customDate2, customDate3")
@@ -39,40 +43,43 @@ public class ActiveCandidates extends BaseUtil {
 				.append(" and (customDate2 is null or DATEDIFF(day, customDate2, CURRENT_TIMESTAMP) > ").append(cutoff).append(")")
 				.append(" and (customDate3 is null or DATEDIFF(day, customDate3, CURRENT_TIMESTAMP) > ").append(cutoff).append(")");
 		// @formatter:on
-		final Path candidatefile = FileSystems.getDefault().getPath("candidates.list");
-		final StringBuilder row = new StringBuilder();
+
+		final ObjectNode data = JsonNodeFactory.instance.objectNode();
+		final ArrayNode cids = data.putArray("ids");
+		data.put("status", "Passive");
+		int cnt = 1;
 		try (final Connection con = DriverManager.getConnection(appConfig.getString("BH_DATAMART_URL"),
 				appConfig.getString("BH_DATAMART_USER"), appConfig.getString("BH_DATAMART_PASSWORD"));
 				final Statement stmt = con.createStatement();
-				final ResultSet rs = stmt.executeQuery(query.toString());
-				final BufferedWriter writer = Files.newBufferedWriter(candidatefile, Charset.forName("UTF-8"),
-						StandardOpenOption.CREATE, StandardOpenOption.APPEND);) {
+				final ResultSet rs = stmt.executeQuery(query.toString());) {
 			while (rs.next()) {
-				row.setLength(0);
-				row.append("\"").append(rs.getInt("userID")).append("\"");
-				row.append(", \"").append(rs.getString("firstName")).append("\"");
-				row.append(", \"").append(rs.getString("lastName")).append("\"");
-				row.append(", \"").append(rs.getString("email")).append("\"");
-				row.append("\", ").append(formatDate(rs.getDate("customDate1"))).append("\"");
-				row.append("\", ").append(formatDate(rs.getDate("customDate2"))).append("\"");
-				row.append("\", ").append(formatDate(rs.getDate("customDate3"))).append("\"");
-				writer.write(row.toString());
-				writer.newLine();
-				writer.flush();
+				if (cnt++ == 1000) {
+					massUpdate(data);
+					cnt = 1;
+					cids.removeAll();
+				}
+				cids.add(rs.getInt("userID"));
 			}
 		}
-
-		// entityApi.update(BHRestApi.Entity.ENTITY_TYPE.CANDIDATE,restToken,
-		// candidates.path("data").get(count).path("id").asInt(),
-		// ((ObjectNode)
-		// candidates.path("data").get(count)).put("status", ""));
+		// update remaining ids
+		if (cids.size() > 0) {
+			massUpdate(data);
+		}
 	}
 
-	private String formatDate(final Date date) {
-		if (date == null) {
-			return "";
-		}
-		return date.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE);
+	/**
+	 * Execute the massupdate
+	 * 
+	 * @param data
+	 * @throws Exception
+	 */
+	private void massUpdate(final ObjectNode data) throws Exception {
+		LOGGER.entry(data);
+
+		final ObjectNode retVal = getEntityApi().massUpdate(BHRestApi.Entity.ENTITY_TYPE.CANDIDATE, getRestToken(),
+				data);
+		LOGGER.info("updated the status");
+		LOGGER.exit(retVal);
 	}
 
 	public static void main(final String... args) {
