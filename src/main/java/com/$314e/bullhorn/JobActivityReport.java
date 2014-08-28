@@ -1,15 +1,14 @@
 package com.$314e.bullhorn;
 
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Iterator;
-
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +22,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class JobActivityReport extends BaseUtil {
 
 	private static final Logger LOGGER = LogManager.getLogger(JobActivityReport.class);
-	private static final ScriptEngineManager engineManager = new ScriptEngineManager();
 
 	public JobActivityReport() throws Exception {
 		super();
@@ -32,11 +30,6 @@ public class JobActivityReport extends BaseUtil {
 
 	private void doExecute() throws Exception {
 		LOGGER.entry();
-
-		// Setup script engine with required javascript functions
-		final ScriptEngine engine = engineManager.getEngineByName("nashorn");
-		engine.eval(new InputStreamReader(this.getClass().getResourceAsStream("/functions.js")));
-		final Invocable invocable = (Invocable) engine;
 
 		// Get all the recruiters from Bullhorn
 		final ObjectNode recruiters = getEntityApi().query(BHRestApi.Entity.ENTITY_TYPE.PERSON, getRestToken(),
@@ -80,7 +73,7 @@ public class JobActivityReport extends BaseUtil {
 					}
 				}
 				LOGGER.debug(jobOrders);
-				LOGGER.debug(invocable.invokeFunction("getJobOrderIds", jobOrders.toString()));
+				LOGGER.debug(getJobOrderIds(jobOrders));
 
 				if (cnt++ > 0) {
 					break;
@@ -89,6 +82,18 @@ public class JobActivityReport extends BaseUtil {
 		}
 
 		LOGGER.exit();
+	}
+
+	/**
+	 * 
+	 * @param jobOrders
+	 * @return
+	 */
+	private String getJobOrderIds(final ArrayNode jobOrders) {
+		LOGGER.entry();
+		return LOGGER.exit(StreamSupport
+				.stream(Spliterators.spliteratorUnknownSize(jobOrders.elements(), Spliterator.IMMUTABLE), false)
+				.map((item) -> item.path("jobOrderID").asText()).collect(Collectors.joining(",")));
 	}
 
 	public static void main(final String... args) {

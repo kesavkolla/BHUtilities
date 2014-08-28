@@ -112,11 +112,6 @@
 			<artifactId>google-oauth-client-jetty</artifactId>
 			<version>1.18.0-rc</version>
 		</dependency>
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.4</version>
-		</dependency>
 
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
