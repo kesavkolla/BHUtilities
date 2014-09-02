@@ -1,0 +1,51 @@
+doctype strict
+html(xmlns="http://www.w3.org/1999/xhtml")
+    head
+        meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+        meta(name="viewport", content="width=device-width")
+        title my jade template
+        style(type="text/css"): include ink.css
+    body
+        table.body: tr: td.center(align="center", valign="top"): center
+            table.row.header: tr: td.center(align="center", valign="top"): center
+                table.container: tr: td.wrapper.last
+                    table.twelve.columns: tr
+                        td: h1 Recruiter Activity Report
+                        td.expander
+            br
+            table.container: tr: td
+                // content start
+                each recruiter, i in emaildata
+                    table.row: tr
+                        td.wrapper: table.four.columns: tr
+                            // Name should come here
+                            td: h6= recruiter.name
+                            td.expander
+                        td.wrapper.last: table.eight.columns: tr
+                            td.panel
+                                if recruiter.jobactivity
+                                    h5 Job Activities
+                                    hr(width="100%")
+                                    each jobactivity,ji in recruiter.jobactivity
+                                        div
+                                            a(href="#{ji}") #{jobactivity.title}
+                                            br
+                                            |#{jobactivity.status}
+                                            if jobactivity.isOpen
+                                                |  (Open)
+                                            if jobactivity.history
+                                                div(style="margin-bottom:5px;")
+                                                    each history,hi in jobactivity.history
+                                                        div #{history.columnName} changed from "#{history.oldValue}" to "#{history.newValue}"
+                                            if jobactivity.activities
+                                                div(style="margin-bottom:5px;")
+                                                    each jactivity,ai in jobactivity.activities
+                                                        div #{ai} - #{jactivity}
+                                        br
+                                    if recruiter.allactivity
+                                        h5 All Activites
+                                        hr(width="100%")
+                                        each activity,ai in recruiter.allactivity
+                                            div #{ai} - #{activity}
+
+                            td.expander  

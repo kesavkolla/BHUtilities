@@ -1,8 +1,6 @@
 package com.$314e.bullhorn;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -11,7 +9,6 @@ import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -20,18 +17,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.$314e.bhrestapi.BHRestApi;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePartHeader;
@@ -40,14 +25,11 @@ public class EmailDate extends BaseUtil {
 
 	private static final Logger LOGGER = LogManager.getLogger(EmailDate.class);
 
-	private static final String APP_NAME = "Gmail API Quickstart";
-	private static final File DATA_STORE_DIR = new File(System.getProperty("user.home"), ".store/gmail");
-	private static final String USER = "me";
-	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	private static final DateFormat queryFormat = new SimpleDateFormat("yyyy/MM/dd");
 
 	public EmailDate() throws Exception {
 		super();
+		setupGmail();
 		doUpdate();
 	}
 
@@ -70,34 +52,6 @@ public class EmailDate extends BaseUtil {
 		ObjectNode updates;
 
 		ObjectNode toUpdate;
-
-		// Authorization of Gmail API
-		final HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-		final FileDataStoreFactory dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
-
-		LOGGER.debug("Loading secret from: {}", this.getClass().getResource("/client_secret.json"));
-		final GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(this
-				.getClass().getResourceAsStream("/client_secret.json")));
-
-		if (clientSecrets.getDetails().getClientId().startsWith("Enter")
-				|| clientSecrets.getDetails().getClientSecret().startsWith("Enter ")) {
-			System.out.println("Enter Client ID and Secret from https://code.google.com/apis/console/?api=plus "
-					+ "into plus-cmdline-sample/src/main/resources/client_secrets.json");
-			System.exit(1);
-		}
-
-		final GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY,
-				"9523858024-1s828b0rlffn957r80ch50vivsequ7cl.apps.googleusercontent.com", "2T56GjlkKVpKU5rKSJi0ZWSj",
-				Collections.singleton(GmailScopes.GMAIL_MODIFY)).setDataStoreFactory(dataStoreFactory).build();
-
-		final Credential auth = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
-
-		LOGGER.debug("Auth expiriation: {}", auth.getExpiresInSeconds());
-
-		final Credential credential = auth;
-
-		final Gmail gmail = new Gmail.Builder(httpTransport, JSON_FACTORY, credential).setApplicationName(APP_NAME)
-				.build();
 
 		// date to be updated
 

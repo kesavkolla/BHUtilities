@@ -1,5 +1,8 @@
 package com.$314e.bullhorn;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,24 +10,67 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
+import org.apache.http.Consts;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.$314e.bhrestapi.BHRestApi;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.api.client.util.Base64;
+import com.google.api.services.gmail.model.Message;
 
 public class JobActivityReport extends BaseUtil {
 
 	private static final Logger LOGGER = LogManager.getLogger(JobActivityReport.class);
 	private static final DateTimeFormatter INPUT_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+	private static final ScriptEngineManager engineManager = new ScriptEngineManager();
+	private final ScriptEngine scriptEngine;
+	private final Invocable invocable;
+	private final Object json;
 
 	public JobActivityReport() throws Exception {
 		super();
+		setupGmail();
+
+		/*
+		 * Setup the script engine
+		 */
+		scriptEngine = engineManager.getEngineByName("nashorn");
+		invocable = (Invocable) scriptEngine;
+
+		try (final InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream(
+				"/template/email.js"));
+				final InputStreamReader reader1 = new InputStreamReader(this.getClass().getResourceAsStream(
+						"/template/runtime.js"))) {
+			scriptEngine.eval(reader1);
+			scriptEngine.eval(reader);
+		}
+		json = scriptEngine.eval("JSON");
+
 		doExecute();
 	}
 
@@ -85,25 +131,24 @@ public class JobActivityReport extends BaseUtil {
 				}
 				// JobOrder History query
 				{
-					final String query = jobHistoryQuery.replace("{userName}", recruiter.path("name").asText());
-					LOGGER.debug(query);
-					try (final ResultSet rs = stmt.executeQuery(query);) {
-						while (rs.next()) {
-							if (!recruiterData.has("jobactivity")) {
-								break;
-							}
-							final ObjectNode jobActivityNode = recruiterData.with("jobactivity");
-							if (jobActivityNode.has(rs.getString("jobOrderID"))) {
-								jobActivityNode
-										.with(rs.getString("jobOrderID"))
-										.withArray("history")
-										.addObject()
-										.put("columnName", rs.getString("columnName"))
-										.put("dateAdded",
-												rs.getTimestamp("dateAdded").toLocalDateTime()
-														.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-										.put("oldValue", rs.getString("oldValue"))
-										.put("newValue", rs.getString("newValue"));
+					if (recruiterData.has("jobactivity")) {
+						final String query = jobHistoryQuery.replace("{userName}", recruiter.path("name").asText());
+						LOGGER.debug(query);
+						try (final ResultSet rs = stmt.executeQuery(query);) {
+							while (rs.next()) {
+								final ObjectNode jobActivityNode = recruiterData.with("jobactivity");
+								if (jobActivityNode.has(rs.getString("jobOrderID"))) {
+									jobActivityNode
+											.with(rs.getString("jobOrderID"))
+											.withArray("history")
+											.addObject()
+											.put("columnName", rs.getString("columnName"))
+											.put("dateAdded",
+													rs.getTimestamp("dateAdded").toLocalDateTime()
+															.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+											.put("oldValue", rs.getString("oldValue"))
+											.put("newValue", rs.getString("newValue"));
+								}
 							}
 						}
 					}
@@ -126,8 +171,50 @@ public class JobActivityReport extends BaseUtil {
 				}
 			}
 		}
+		sendEmail(emailData);
 
-		LOGGER.debug(emailData);
+		LOGGER.exit();
+	}
+
+	/**
+	 * 
+	 * @param emailData
+	 * @throws Exception
+	 */
+	private void sendEmail(final ArrayNode emailData) throws Exception {
+		LOGGER.entry(emailData);
+		// Convert java json object to JavaScript json object
+		final Object jsonData = invocable.invokeMethod(json, "parse", "{\"emaildata\":" + emailData.toString() + "}");
+		// Execute compiled jade template
+		final String emailText = (String) invocable.invokeFunction("template", jsonData);
+
+		// Do style inlie for sending email
+		final HttpPost httppost = new HttpPost("http://zurb.com/ink/skate-proxy.php");
+		final List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+		formparams.add(new BasicNameValuePair("source", emailText));
+		final UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, Consts.UTF_8);
+		httppost.setEntity(entity);
+		final CloseableHttpClient httpclient = HttpClients.createDefault();
+		final ObjectMapper objectMapper = new ObjectMapper();
+		final JsonNode respData = objectMapper.readTree(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
+		final String premailText = respData.path("html").asText();
+
+		// Send email to recipients
+		final Session session = Session.getDefaultInstance(new Properties(), null);
+		final MimeMessage email = new MimeMessage(session);
+		email.setSubject("Recruiter Job Activity Report");
+		email.setFrom("me");
+		email.setContent(premailText, "text/html; charset=utf-8");
+
+		LOGGER.debug("sending email to {}", appConfig.getString("email.recipients"));
+		for (final String receipent : appConfig.getString("email.recipients").split(";|,")) {
+			email.addRecipients(RecipientType.TO, receipent);
+		}
+
+		final Message retMsg = gmail.users().messages().send("me", createMessageWithEmail(email)).execute();
+		LOGGER.debug("Message id: " + retMsg.getId());
+		LOGGER.debug(retMsg.toPrettyString());
+
 		LOGGER.exit();
 	}
 
@@ -242,6 +329,24 @@ public class JobActivityReport extends BaseUtil {
 				.append(strPeriodEnd).append("'}")
 				.append(" AND (oldValue LIKE '%{userName}%' OR newValue LIKE '%{userName}%')");
 		return LOGGER.exit(query.toString());
+	}
+
+	/**
+	 * Create a Message from an email
+	 *
+	 * @param email
+	 *            Email to be set to raw of message
+	 * @return Message containing base64 encoded email.
+	 * @throws IOException
+	 * @throws MessagingException
+	 */
+	public static Message createMessageWithEmail(MimeMessage email) throws Exception {
+		final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		email.writeTo(bytes);
+		final String encodedEmail = Base64.encodeBase64URLSafeString(bytes.toByteArray());
+		final Message message = new Message();
+		message.setRaw(encodedEmail);
+		return message;
 	}
 
 	public static void main(final String... args) {
