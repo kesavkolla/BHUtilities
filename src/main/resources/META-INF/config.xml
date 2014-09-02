@@ -3,7 +3,7 @@
 <configuration>
 	<system />
 	<properties fileName="bhapi.properties" />
-	<properties fileName="application.properties" />
 	<properties fileName="application.properties" basePath="." config-optional="true" />
+	<properties fileName="application.properties" />
 
 </configuration>
