@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Properties;
+
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.DefaultConfigurationBuilder;
@@ -36,6 +40,8 @@ public class BaseUtil {
 	private BHRestApi.Entity entityApi;
 
 	protected Gmail gmail;
+
+	protected Session mailSession;
 
 	public BaseUtil() throws Exception {
 		LOGGER.entry();
@@ -93,6 +99,25 @@ public class BaseUtil {
 				APP_NAME).build();
 
 		LOGGER.exit();
+	}
+
+	/**
+	 * setup SMTP session
+	 * 
+	 * @throws Exception
+	 */
+	protected void setupSMTP() throws Exception {
+		final Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", appConfig.getString("mail.smtp.host", "smtp.gmail.com"));
+		props.put("mail.smtp.port", appConfig.getString("mail.smtp.port", "587"));
+		mailSession = Session.getInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(appConfig.getString("mail.smtp.user"), appConfig
+						.getString("mail.smtp.password"));
+			}
+		});
 	}
 
 	protected Configuration getConfig() {

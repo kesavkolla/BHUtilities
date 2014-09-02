@@ -14,10 +14,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import javax.mail.MessagingException;
-import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.script.Invocable;
@@ -55,7 +54,7 @@ public class JobActivityReport extends BaseUtil {
 
 	public JobActivityReport() throws Exception {
 		super();
-		setupGmail();
+		setupSMTP();
 
 		/*
 		 * Setup the script engine
@@ -207,20 +206,16 @@ public class JobActivityReport extends BaseUtil {
 		premailText = premailText.replace("&amp; copy;", "&copy;").replace("&amp; nbsp;", "&nbsp;");
 
 		// Send email to recipients
-		final Session session = Session.getDefaultInstance(new Properties(), null);
-		final MimeMessage email = new MimeMessage(session);
+		final MimeMessage email = new MimeMessage(mailSession);
 		email.setSubject("Recruiter Job Activity Report");
-		email.setFrom("me");
+		email.setFrom(appConfig.getString("mail.smtp.user"));
 		email.setContent(premailText, "text/html; charset=utf-8");
 
 		LOGGER.debug("sending email to {}", appConfig.getString("email.recipients"));
 		for (final String receipent : appConfig.getString("email.recipients").split(";|,")) {
 			email.addRecipients(RecipientType.TO, receipent);
 		}
-
-		final Message retMsg = gmail.users().messages().send("me", createMessageWithEmail(email)).execute();
-		LOGGER.debug("Message id: " + retMsg.getId());
-		LOGGER.debug(retMsg.toPrettyString());
+		Transport.send(email);
 
 		LOGGER.exit();
 	}
