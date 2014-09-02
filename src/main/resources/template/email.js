@@ -12,7 +12,7 @@ buf.push("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://ww
     for (var i = 0, $$l = $$obj.length; i < $$l; i++) {
       var recruiter = $$obj[i];
 
-buf.push("<table class=\"row footer\"><tr><td class=\"wrapper last\"><table class=\"twelve columns\"><tr><td style=\"background:#ebebeb; padding: 10px 10px 0px 10px;\"><h5 style=\"color:#48c3b1; font-weight:bold\">" + (jade.escape(null == (jade_interp = recruiter.name) ? "" : jade_interp)) + "</h5></td><td class=\"expander\"></td></tr></table></td></tr></table><table class=\"row footer\"><tr><td class=\"wrapper\"><table class=\"seven columns\"><tr><!-- Name should come here--><td style=\"padding-top:10px\" class=\"left-text-pad\"><h6 style=\"color:#636567; padding-bottom:10px\">Job Activity</h6>");
+buf.push("<table class=\"row footer\"><tr><td class=\"wrapper last\"><table class=\"twelve columns\"><tr><td style=\"background:#ebebeb; padding: 10px 10px 0px 10px;\"><h5 style=\"color:#48c3b1; font-weight:bold\">" + (jade.escape(null == (jade_interp = recruiter.name) ? "" : jade_interp)) + "</h5></td><td class=\"expander\"></td></tr></table></td></tr></table><table class=\"row footer\"><tr><td class=\"wrapper\"><table class=\"seven columns\"><tr><!-- Name should come here--><td style=\"padding-top:10px\" class=\"left-text-pad\"><h6 style=\"color:#636567; padding-bottom:10px\">Assigned Jobs</h6>");
 if ( recruiter.jobactivity)
 {
 buf.push("<table><tr><td>");
@@ -24,14 +24,14 @@ buf.push("<table><tr><td>");
     for (var ji = 0, $$l = $$obj.length; ji < $$l; ji++) {
       var jobactivity = $$obj[ji];
 
-buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=" + (ji) + "", true, false)) + ">" + (jade.escape((jade_interp = ji) == null ? '' : jade_interp)) + " - " + (jade.escape((jade_interp = jobactivity.title) == null ? '' : jade_interp)) + "</a></strong><br/>Current Status: " + (jade.escape((jade_interp = jobactivity.status) == null ? '' : jade_interp)) + "");
+buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=" + (ji) + "", true, false)) + ">" + (jade.escape((jade_interp = ji) == null ? '' : jade_interp)) + " - " + (jade.escape((jade_interp = jobactivity.title) == null ? '' : jade_interp)) + "</a></strong><br/>Current Status: " + (jade.escape((jade_interp = jobactivity.status) == null ? '' : jade_interp)) + "");
 if ( jobactivity.isOpen)
 {
 buf.push(" (Open)");
 }
+buf.push("<br/>");
 if ( jobactivity.history)
 {
-buf.push("<br/>");
 // iterate jobactivity.history
 ;(function(){
   var $$obj = jobactivity.history;
@@ -40,7 +40,7 @@ buf.push("<br/>");
     for (var hi = 0, $$l = $$obj.length; hi < $$l; hi++) {
       var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
     }
 
   } else {
@@ -48,7 +48,7 @@ buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jad
     for (var hi in $$obj) {
       $$l++;      var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
     }
 
   }
@@ -57,7 +57,6 @@ buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jad
 }
 if ( jobactivity.activities)
 {
-buf.push("<br/>");
 // iterate jobactivity.activities
 ;(function(){
   var $$obj = jobactivity.activities;
@@ -91,14 +90,14 @@ buf.push("</p>");
     for (var ji in $$obj) {
       $$l++;      var jobactivity = $$obj[ji];
 
-buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=" + (ji) + "", true, false)) + ">" + (jade.escape((jade_interp = ji) == null ? '' : jade_interp)) + " - " + (jade.escape((jade_interp = jobactivity.title) == null ? '' : jade_interp)) + "</a></strong><br/>Current Status: " + (jade.escape((jade_interp = jobactivity.status) == null ? '' : jade_interp)) + "");
+buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=" + (ji) + "", true, false)) + ">" + (jade.escape((jade_interp = ji) == null ? '' : jade_interp)) + " - " + (jade.escape((jade_interp = jobactivity.title) == null ? '' : jade_interp)) + "</a></strong><br/>Current Status: " + (jade.escape((jade_interp = jobactivity.status) == null ? '' : jade_interp)) + "");
 if ( jobactivity.isOpen)
 {
 buf.push(" (Open)");
 }
+buf.push("<br/>");
 if ( jobactivity.history)
 {
-buf.push("<br/>");
 // iterate jobactivity.history
 ;(function(){
   var $$obj = jobactivity.history;
@@ -107,7 +106,7 @@ buf.push("<br/>");
     for (var hi = 0, $$l = $$obj.length; hi < $$l; hi++) {
       var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
     }
 
   } else {
@@ -115,7 +114,7 @@ buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jad
     for (var hi in $$obj) {
       $$l++;      var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
     }
 
   }
@@ -124,7 +123,6 @@ buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jad
 }
 if ( jobactivity.activities)
 {
-buf.push("<br/>");
 // iterate jobactivity.activities
 ;(function(){
   var $$obj = jobactivity.activities;
@@ -196,7 +194,7 @@ buf.push("</td><td class=\"expander\"></td></tr></table></td></tr></table>");
     for (var i in $$obj) {
       $$l++;      var recruiter = $$obj[i];
 
-buf.push("<table class=\"row footer\"><tr><td class=\"wrapper last\"><table class=\"twelve columns\"><tr><td style=\"background:#ebebeb; padding: 10px 10px 0px 10px;\"><h5 style=\"color:#48c3b1; font-weight:bold\">" + (jade.escape(null == (jade_interp = recruiter.name) ? "" : jade_interp)) + "</h5></td><td class=\"expander\"></td></tr></table></td></tr></table><table class=\"row footer\"><tr><td class=\"wrapper\"><table class=\"seven columns\"><tr><!-- Name should come here--><td style=\"padding-top:10px\" class=\"left-text-pad\"><h6 style=\"color:#636567; padding-bottom:10px\">Job Activity</h6>");
+buf.push("<table class=\"row footer\"><tr><td class=\"wrapper last\"><table class=\"twelve columns\"><tr><td style=\"background:#ebebeb; padding: 10px 10px 0px 10px;\"><h5 style=\"color:#48c3b1; font-weight:bold\">" + (jade.escape(null == (jade_interp = recruiter.name) ? "" : jade_interp)) + "</h5></td><td class=\"expander\"></td></tr></table></td></tr></table><table class=\"row footer\"><tr><td class=\"wrapper\"><table class=\"seven columns\"><tr><!-- Name should come here--><td style=\"padding-top:10px\" class=\"left-text-pad\"><h6 style=\"color:#636567; padding-bottom:10px\">Assigned Jobs</h6>");
 if ( recruiter.jobactivity)
 {
 buf.push("<table><tr><td>");
@@ -208,14 +206,14 @@ buf.push("<table><tr><td>");
     for (var ji = 0, $$l = $$obj.length; ji < $$l; ji++) {
       var jobactivity = $$obj[ji];
 
-buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=" + (ji) + "", true, false)) + ">" + (jade.escape((jade_interp = ji) == null ? '' : jade_interp)) + " - " + (jade.escape((jade_interp = jobactivity.title) == null ? '' : jade_interp)) + "</a></strong><br/>Current Status: " + (jade.escape((jade_interp = jobactivity.status) == null ? '' : jade_interp)) + "");
+buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=" + (ji) + "", true, false)) + ">" + (jade.escape((jade_interp = ji) == null ? '' : jade_interp)) + " - " + (jade.escape((jade_interp = jobactivity.title) == null ? '' : jade_interp)) + "</a></strong><br/>Current Status: " + (jade.escape((jade_interp = jobactivity.status) == null ? '' : jade_interp)) + "");
 if ( jobactivity.isOpen)
 {
 buf.push(" (Open)");
 }
+buf.push("<br/>");
 if ( jobactivity.history)
 {
-buf.push("<br/>");
 // iterate jobactivity.history
 ;(function(){
   var $$obj = jobactivity.history;
@@ -224,7 +222,7 @@ buf.push("<br/>");
     for (var hi = 0, $$l = $$obj.length; hi < $$l; hi++) {
       var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
     }
 
   } else {
@@ -232,7 +230,7 @@ buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jad
     for (var hi in $$obj) {
       $$l++;      var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
     }
 
   }
@@ -241,7 +239,6 @@ buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jad
 }
 if ( jobactivity.activities)
 {
-buf.push("<br/>");
 // iterate jobactivity.activities
 ;(function(){
   var $$obj = jobactivity.activities;
@@ -275,14 +272,14 @@ buf.push("</p>");
     for (var ji in $$obj) {
       $$l++;      var jobactivity = $$obj[ji];
 
-buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=" + (ji) + "", true, false)) + ">" + (jade.escape((jade_interp = ji) == null ? '' : jade_interp)) + " - " + (jade.escape((jade_interp = jobactivity.title) == null ? '' : jade_interp)) + "</a></strong><br/>Current Status: " + (jade.escape((jade_interp = jobactivity.status) == null ? '' : jade_interp)) + "");
+buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=" + (ji) + "", true, false)) + ">" + (jade.escape((jade_interp = ji) == null ? '' : jade_interp)) + " - " + (jade.escape((jade_interp = jobactivity.title) == null ? '' : jade_interp)) + "</a></strong><br/>Current Status: " + (jade.escape((jade_interp = jobactivity.status) == null ? '' : jade_interp)) + "");
 if ( jobactivity.isOpen)
 {
 buf.push(" (Open)");
 }
+buf.push("<br/>");
 if ( jobactivity.history)
 {
-buf.push("<br/>");
 // iterate jobactivity.history
 ;(function(){
   var $$obj = jobactivity.history;
@@ -291,7 +288,7 @@ buf.push("<br/>");
     for (var hi = 0, $$l = $$obj.length; hi < $$l; hi++) {
       var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
     }
 
   } else {
@@ -299,7 +296,7 @@ buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jad
     for (var hi in $$obj) {
       $$l++;      var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
     }
 
   }
@@ -308,7 +305,6 @@ buf.push("" + (jade.escape((jade_interp = history.columnName) == null ? '' : jad
 }
 if ( jobactivity.activities)
 {
-buf.push("<br/>");
 // iterate jobactivity.activities
 ;(function(){
   var $$obj = jobactivity.activities;
@@ -378,5 +374,5 @@ buf.push("</td><td class=\"expander\"></td></tr></table></td></tr></table>");
   }
 }).call(this);
 
-buf.push("</td></tr></table><table class=\"container\"><tr><td align=\"center\" class=\"center\"><center><table class=\"row header\"><tr><td class=\"wrapper last\"><table class=\"twelve columns\"><tr><td style=\"padding-bottom:25px; padding-top:15px; text-align:center; color:#fff\">&copy; 2014 314e Corporation. All rights reserved.</td><td class=\"expander\"></td></tr></table></td></tr></table></center></td></tr></table></center></td></tr></table></body></html>");}.call(this,"rundate" in locals_for_with?locals_for_with.rundate:typeof rundate!=="undefined"?rundate:undefined,"emaildata" in locals_for_with?locals_for_with.emaildata:typeof emaildata!=="undefined"?emaildata:undefined));;return buf.join("");
+buf.push("</td></tr></table><table class=\"container\"><tr><td align=\"center\" class=\"center\"><center><table class=\"row header\"><tr><td class=\"wrapper last\"><table class=\"twelve columns\"><tr><td style=\"padding-bottom:25px; padding-top:15px; text-align:center; color:#fff\">& copy; 2014 314e Corporation. All rights reserved.</td><td class=\"expander\"></td></tr></table></td></tr></table></center></td></tr></table></center></td></tr></table></body></html>");}.call(this,"rundate" in locals_for_with?locals_for_with.rundate:typeof rundate!=="undefined"?rundate:undefined,"emaildata" in locals_for_with?locals_for_with.emaildata:typeof emaildata!=="undefined"?emaildata:undefined));;return buf.join("");
 }

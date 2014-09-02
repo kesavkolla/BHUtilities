@@ -28,25 +28,24 @@ html(xmlns="http://www.w3.org/1999/xhtml")
                         td.wrapper: table.seven.columns: tr
                             // Name should come here
                             td.left-text-pad(style="padding-top:10px")
-                                h6(style="color:#636567; padding-bottom:10px") Job Activity
+                                h6(style="color:#636567; padding-bottom:10px") Assigned Jobs
                                 if recruiter.jobactivity
                                     table: tr: td
                                         each jobactivity,ji in recruiter.jobactivity
                                             p(style="color:#939597; font-size:11px")
                                                 strong
-                                                    a(href="https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=#{ji}")
+                                                    a(style="color:#48c3b1 !important;", href="https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=#{ji}")
                                                         | #{ji} - #{jobactivity.title}
                                                 br
                                                 |Current Status: #{jobactivity.status}
                                                 if jobactivity.isOpen
                                                     |  (Open)
+                                                br
                                                 if jobactivity.history
-                                                    br
                                                     each history,hi in jobactivity.history
-                                                        |#{history.columnName} changed from "#{history.oldValue}" to "#{history.newValue}"
+                                                        |#{history.columnName.replace('correlatedCustomText2', 'Recruiter')} changed from "#{history.oldValue}" to "#{history.newValue}"
                                                         br
                                                 if jobactivity.activities
-                                                    br
                                                     each jactivity,ai in jobactivity.activities
                                                         - var lstyle = ai.indexOf('_Note')>-1 ? '' : 'color:#48c3b1;'
                                                         span(style="#{lstyle}")
@@ -72,5 +71,5 @@ html(xmlns="http://www.w3.org/1999/xhtml")
                 table.row.header: tr: td.wrapper.last
                     table.twelve.columns: tr
                         td(style="padding-bottom:25px; padding-top:15px; text-align:center; color:#fff")
-                            |&copy; 2014 314e Corporation. All rights reserved.
+                            |& copy; 2014 314e Corporation. All rights reserved.
                         td.expander

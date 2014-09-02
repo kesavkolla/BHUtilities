@@ -146,7 +146,7 @@ public class JobActivityReport extends BaseUtil {
 											.put("columnName", rs.getString("columnName"))
 											.put("dateAdded",
 													rs.getTimestamp("dateAdded").toLocalDateTime()
-															.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+															.format(DateTimeFormatter.ISO_LOCAL_TIME))
 											.put("oldValue", rs.getString("oldValue"))
 											.put("newValue", rs.getString("newValue"));
 								}
@@ -201,7 +201,10 @@ public class JobActivityReport extends BaseUtil {
 		final CloseableHttpClient httpclient = HttpClients.createDefault();
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final JsonNode respData = objectMapper.readTree(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
-		final String premailText = respData.path("html").asText();
+		String premailText = respData.path("html").asText();
+		// Replace copy right and nbsp -- This is a fix for zrub inliner not
+		// able to handle http entities properly
+		premailText = premailText.replace("&amp; copy;", "&copy;").replace("&amp; nbsp;", "&nbsp;");
 
 		// Send email to recipients
 		final Session session = Session.getDefaultInstance(new Properties(), null);
