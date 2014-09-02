@@ -156,6 +156,7 @@ buf.push("</div><br/>");
   }
 }).call(this);
 
+}
 if ( recruiter.allactivity)
 {
 buf.push("<h5>All Activites</h5><hr width=\"100%\"/>");
@@ -182,8 +183,7 @@ buf.push("<div>" + (jade.escape((jade_interp = ai) == null ? '' : jade_interp)) 
 }).call(this);
 
 }
-}
-buf.push("</td><td class=\"expander\"> </td></tr></table></td></tr></table>");
+buf.push("</td><td class=\"expander\"></td></tr></table></td></tr></table>");
     }
 
   } else {
@@ -335,6 +335,7 @@ buf.push("</div><br/>");
   }
 }).call(this);
 
+}
 if ( recruiter.allactivity)
 {
 buf.push("<h5>All Activites</h5><hr width=\"100%\"/>");
@@ -361,8 +362,7 @@ buf.push("<div>" + (jade.escape((jade_interp = ai) == null ? '' : jade_interp)) 
 }).call(this);
 
 }
-}
-buf.push("</td><td class=\"expander\"> </td></tr></table></td></tr></table>");
+buf.push("</td><td class=\"expander\"></td></tr></table></td></tr></table>");
     }
 
   }

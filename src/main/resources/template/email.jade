@@ -42,10 +42,10 @@ html(xmlns="http://www.w3.org/1999/xhtml")
                                                     each jactivity,ai in jobactivity.activities
                                                         div #{ai} - #{jactivity}
                                         br
-                                    if recruiter.allactivity
-                                        h5 All Activites
-                                        hr(width="100%")
-                                        each activity,ai in recruiter.allactivity
-                                            div #{ai} - #{activity}
+                                if recruiter.allactivity
+                                    h5 All Activites
+                                    hr(width="100%")
+                                    each activity,ai in recruiter.allactivity
+                                        div #{ai} - #{activity}
 
-                            td.expander  
+                            td.expander
