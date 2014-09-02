@@ -5,47 +5,72 @@ html(xmlns="http://www.w3.org/1999/xhtml")
         meta(name="viewport", content="width=device-width")
         title my jade template
         style(type="text/css"): include ink.css
+        style(type="text/css"): include custom.css
     body
         table.body: tr: td.center(align="center", valign="top"): center
-            table.row.header: tr: td.center(align="center", valign="top"): center
-                table.container: tr: td.wrapper.last
+            table.container: tr: td.center(align="center", valign="top"): center
+                table.row.header: tr: td.wrapper.last
                     table.twelve.columns: tr
-                        td: h1 Recruiter Activity Report
+                        td(style="text-align:right; vertical-align:middle;padding-right:10px;")
+                            span.template-label Recruiter Activity Report
+                                br
+                                | #{rundate}
                         td.expander
             br
             table.container: tr: td
                 // content start
                 each recruiter, i in emaildata
-                    table.row: tr
-                        td.wrapper: table.four.columns: tr
+                    table.row.footer: tr: td.wrapper.last: table.twelve.columns: tr
+                        td(style="background:#ebebeb; padding: 10px 10px 0px 10px;")
+                            h5(style="color:#48c3b1; font-weight:bold")= recruiter.name
+                        td.expander
+                    table.row.footer: tr
+                        td.wrapper: table.seven.columns: tr
                             // Name should come here
-                            td: h6= recruiter.name
-                            td.expander
-                        td.wrapper.last: table.eight.columns: tr
-                            td.panel
+                            td.left-text-pad(style="padding-top:10px")
+                                h6(style="color:#636567; padding-bottom:10px") Job Activity
                                 if recruiter.jobactivity
-                                    h5 Job Activities
-                                    hr(width="100%")
-                                    each jobactivity,ji in recruiter.jobactivity
-                                        div
-                                            a(href="#{ji}") #{jobactivity.title}
-                                            br
-                                            |#{jobactivity.status}
-                                            if jobactivity.isOpen
-                                                |  (Open)
-                                            if jobactivity.history
-                                                div(style="margin-bottom:5px;")
+                                    table: tr: td
+                                        each jobactivity,ji in recruiter.jobactivity
+                                            p(style="color:#939597; font-size:11px")
+                                                strong
+                                                    a(href="https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=JobOrder&id=#{ji}")
+                                                        | #{ji} - #{jobactivity.title}
+                                                br
+                                                |Current Status: #{jobactivity.status}
+                                                if jobactivity.isOpen
+                                                    |  (Open)
+                                                if jobactivity.history
+                                                    br
                                                     each history,hi in jobactivity.history
-                                                        div #{history.columnName} changed from "#{history.oldValue}" to "#{history.newValue}"
-                                            if jobactivity.activities
-                                                div(style="margin-bottom:5px;")
+                                                        |#{history.columnName} changed from "#{history.oldValue}" to "#{history.newValue}"
+                                                        br
+                                                if jobactivity.activities
+                                                    br
                                                     each jactivity,ai in jobactivity.activities
-                                                        div #{ai} - #{jactivity}
-                                        br
-                                if recruiter.allactivity
-                                    h5 All Activites
-                                    hr(width="100%")
-                                    each activity,ai in recruiter.allactivity
-                                        div #{ai} - #{activity}
-
+                                                        - var lstyle = ai.indexOf('_Note')>-1 ? '' : 'color:#48c3b1;'
+                                                        span(style="#{lstyle}")
+                                                            strong #{ai.replace('_Note', ' Notes')}:  
+                                                            |#{jactivity}
+                                                        br
                             td.expander
+                        td.wrapper.last: table.five.columns(style="background:#fff"): tr
+                            td.last.right-text-pad(style="padding-top:10px")
+                                h6(style="color:#636567; padding-bottom:10px") All Activity
+                                if recruiter.allactivity
+                                    table: tr: td
+                                        p(style="color:#939597; font-size:11px")
+                                            each activity,ai in recruiter.allactivity
+                                                - var lstyle = ai.indexOf('_Note')>-1 ? '' : 'color:#48c3b1;'
+                                                span(style="#{lstyle}")
+                                                    strong #{ai.replace('_Note', ' Notes')}:  
+                                                    |#{activity}
+                                                br
+                            td.expander
+
+            table.container: tr: td.center(align="center"): center
+                table.row.header: tr: td.wrapper.last
+                    table.twelve.columns: tr
+                        td(style="padding-bottom:25px; padding-top:15px; text-align:center; color:#fff")
+                            |&copy; 2014 314e Corporation. All rights reserved.
+                        td.expander

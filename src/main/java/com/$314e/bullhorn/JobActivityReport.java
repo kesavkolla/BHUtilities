@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -183,8 +184,11 @@ public class JobActivityReport extends BaseUtil {
 	 */
 	private void sendEmail(final ArrayNode emailData) throws Exception {
 		LOGGER.entry(emailData);
+		final ObjectNode inputNode = JsonNodeFactory.instance.objectNode();
+		inputNode.put("emaildata", emailData);
+		inputNode.put("rundate", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss")));
 		// Convert java json object to JavaScript json object
-		final Object jsonData = invocable.invokeMethod(json, "parse", "{\"emaildata\":" + emailData.toString() + "}");
+		final Object jsonData = invocable.invokeMethod(json, "parse", inputNode.toString());
 		// Execute compiled jade template
 		final String emailText = (String) invocable.invokeFunction("template", jsonData);
 
