@@ -183,9 +183,10 @@ public class JobActivityReport extends BaseUtil {
 	 */
 	private void sendEmail(final ArrayNode emailData) throws Exception {
 		LOGGER.entry(emailData);
+		final String runDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss"));
 		final ObjectNode inputNode = JsonNodeFactory.instance.objectNode();
 		inputNode.put("emaildata", emailData);
-		inputNode.put("rundate", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss")));
+		inputNode.put("rundate", runDate);
 		// Convert java json object to JavaScript json object
 		final Object jsonData = invocable.invokeMethod(json, "parse", inputNode.toString());
 		// Execute compiled jade template
@@ -207,7 +208,7 @@ public class JobActivityReport extends BaseUtil {
 
 		// Send email to recipients
 		final MimeMessage email = new MimeMessage(mailSession);
-		email.setSubject("Recruiter Job Activity Report");
+		email.setSubject("Recruiter Job Activity Report for date: " + runDate);
 		email.setFrom(appConfig.getString("mail.smtp.user"));
 		email.setContent(premailText, "text/html; charset=utf-8");
 
