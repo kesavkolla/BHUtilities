@@ -40,7 +40,7 @@ if ( jobactivity.history)
     for (var hi = 0, $$l = $$obj.length; hi < $$l; hi++) {
       var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from <b>" + (jade.escape(null == (jade_interp = history.oldValue  ) ? "" : jade_interp)) + "</b> to  <b>" + (jade.escape(null == (jade_interp = history.newValue  ) ? "" : jade_interp)) + "</b> at  <b>" + (jade.escape(null == (jade_interp = history.dateAdded) ? "" : jade_interp)) + "</b><br/>");
     }
 
   } else {
@@ -48,7 +48,7 @@ buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlated
     for (var hi in $$obj) {
       $$l++;      var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from <b>" + (jade.escape(null == (jade_interp = history.oldValue  ) ? "" : jade_interp)) + "</b> to  <b>" + (jade.escape(null == (jade_interp = history.newValue  ) ? "" : jade_interp)) + "</b> at  <b>" + (jade.escape(null == (jade_interp = history.dateAdded) ? "" : jade_interp)) + "</b><br/>");
     }
 
   }
@@ -106,7 +106,7 @@ if ( jobactivity.history)
     for (var hi = 0, $$l = $$obj.length; hi < $$l; hi++) {
       var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from <b>" + (jade.escape(null == (jade_interp = history.oldValue  ) ? "" : jade_interp)) + "</b> to  <b>" + (jade.escape(null == (jade_interp = history.newValue  ) ? "" : jade_interp)) + "</b> at  <b>" + (jade.escape(null == (jade_interp = history.dateAdded) ? "" : jade_interp)) + "</b><br/>");
     }
 
   } else {
@@ -114,7 +114,7 @@ buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlated
     for (var hi in $$obj) {
       $$l++;      var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from <b>" + (jade.escape(null == (jade_interp = history.oldValue  ) ? "" : jade_interp)) + "</b> to  <b>" + (jade.escape(null == (jade_interp = history.newValue  ) ? "" : jade_interp)) + "</b> at  <b>" + (jade.escape(null == (jade_interp = history.dateAdded) ? "" : jade_interp)) + "</b><br/>");
     }
 
   }
@@ -222,7 +222,7 @@ if ( jobactivity.history)
     for (var hi = 0, $$l = $$obj.length; hi < $$l; hi++) {
       var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from <b>" + (jade.escape(null == (jade_interp = history.oldValue  ) ? "" : jade_interp)) + "</b> to  <b>" + (jade.escape(null == (jade_interp = history.newValue  ) ? "" : jade_interp)) + "</b> at  <b>" + (jade.escape(null == (jade_interp = history.dateAdded) ? "" : jade_interp)) + "</b><br/>");
     }
 
   } else {
@@ -230,7 +230,7 @@ buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlated
     for (var hi in $$obj) {
       $$l++;      var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from <b>" + (jade.escape(null == (jade_interp = history.oldValue  ) ? "" : jade_interp)) + "</b> to  <b>" + (jade.escape(null == (jade_interp = history.newValue  ) ? "" : jade_interp)) + "</b> at  <b>" + (jade.escape(null == (jade_interp = history.dateAdded) ? "" : jade_interp)) + "</b><br/>");
     }
 
   }
@@ -288,7 +288,7 @@ if ( jobactivity.history)
     for (var hi = 0, $$l = $$obj.length; hi < $$l; hi++) {
       var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from <b>" + (jade.escape(null == (jade_interp = history.oldValue  ) ? "" : jade_interp)) + "</b> to  <b>" + (jade.escape(null == (jade_interp = history.newValue  ) ? "" : jade_interp)) + "</b> at  <b>" + (jade.escape(null == (jade_interp = history.dateAdded) ? "" : jade_interp)) + "</b><br/>");
     }
 
   } else {
@@ -296,7 +296,7 @@ buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlated
     for (var hi in $$obj) {
       $$l++;      var history = $$obj[hi];
 
-buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from \"" + (jade.escape((jade_interp = history.oldValue) == null ? '' : jade_interp)) + "\" to \"" + (jade.escape((jade_interp = history.newValue) == null ? '' : jade_interp)) + "\"<br/>");
+buf.push("" + (jade.escape((jade_interp = history.columnName.replace('correlatedCustomText2', 'Recruiter')) == null ? '' : jade_interp)) + " changed from <b>" + (jade.escape(null == (jade_interp = history.oldValue  ) ? "" : jade_interp)) + "</b> to  <b>" + (jade.escape(null == (jade_interp = history.newValue  ) ? "" : jade_interp)) + "</b> at  <b>" + (jade.escape(null == (jade_interp = history.dateAdded) ? "" : jade_interp)) + "</b><br/>");
     }
 
   }

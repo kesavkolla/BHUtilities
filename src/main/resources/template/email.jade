@@ -43,7 +43,12 @@ html(xmlns="http://www.w3.org/1999/xhtml")
                                                 br
                                                 if jobactivity.history
                                                     each history,hi in jobactivity.history
-                                                        |#{history.columnName.replace('correlatedCustomText2', 'Recruiter')} changed from "#{history.oldValue}" to "#{history.newValue}"
+                                                        |#{history.columnName.replace('correlatedCustomText2', 'Recruiter')} changed from 
+                                                        b=   history.oldValue  
+                                                        |  to  
+                                                        b=   history.newValue  
+                                                        |  at  
+                                                        b=   history.dateAdded
                                                         br
                                                 if jobactivity.activities
                                                     each jactivity,ai in jobactivity.activities
