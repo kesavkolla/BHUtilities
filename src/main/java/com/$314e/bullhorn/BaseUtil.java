@@ -11,6 +11,10 @@ import javax.mail.Session;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.DefaultConfigurationBuilder;
+import org.apache.commons.configuration.DefaultConfigurationBuilder.ConfigurationDeclaration;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.beanutils.BeanDeclaration;
+import org.apache.commons.configuration.tree.ConfigurationNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,8 +53,10 @@ public class BaseUtil {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
 		// Setup the commons configuration
-		final DefaultConfigurationBuilder factory = new DefaultConfigurationBuilder("META-INF/config.xml");
-		appConfig = factory.getConfiguration();
+		final DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder("META-INF/config.xml");
+		builder.addConfigurationProvider("mainconfig", new MainConfigProvider(PropertiesConfiguration.class));
+
+		appConfig = builder.getConfiguration();
 
 		// Setup BHRest API
 		final ObjectNode token = BHRestUtil.getRestToken((String) appConfig.getProperty("BH_CLIENT_ID"),
@@ -141,6 +147,30 @@ public class BaseUtil {
 				return iterator;
 			}
 		};
+	}
+
+	public class MainConfigProvider extends DefaultConfigurationBuilder.FileConfigurationProvider {
+
+		public MainConfigProvider(final Class<PropertiesConfiguration> configCls) {
+			super(configCls);
+		}
+
+		@SuppressWarnings("rawtypes")
+		@Override
+		protected void initBeanInstance(final Object bean, final BeanDeclaration data) throws Exception {
+			if (data == null) {
+				return;
+			}
+			final ConfigurationDeclaration cdata = (ConfigurationDeclaration) data;
+			final ConfigurationNode cnode = cdata.getNode();
+			if (cnode == null || cnode.getAttributes("fileName") == null || cnode.getAttributes("fileName").size() < 1) {
+				return;
+			}
+			final StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+			final Class mainCls = Class.forName(stack[stack.length - 1].getClassName());
+			cnode.getAttributes("fileName").get(0).setValue(mainCls.getSimpleName().toLowerCase() + ".properties");
+			super.initBeanInstance(bean, data);
+		}
 	}
 
 }
