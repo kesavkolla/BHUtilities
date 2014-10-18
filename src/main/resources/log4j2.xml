@@ -9,7 +9,7 @@
 		<Logger name="com.$314e.bullhorn" level="all" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
-		<Logger name="org.apache.commons.configuration" level="error">
+		<Logger name="org.apache.commons.configuration" level="error" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
 		<Root level="warn">

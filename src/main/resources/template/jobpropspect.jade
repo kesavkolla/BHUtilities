@@ -1,0 +1,53 @@
+doctype strict
+html(xmlns="http://www.w3.org/1999/xhtml")
+	head
+		meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+		meta(name="viewport", content="width=device-width")
+		title Job Prospective Report
+		style(type="text/css"): include ink.css
+		style(type="text/css"): include custom.css
+	body
+		table.body: tr: td.center(align="center", valign="top"): center
+			table.container: tr: td.center(align="center", valign="top"): center
+				table.row.header: tr: td.wrapper.last
+					table.twelve.columns: tr
+						td(style="text-align:right; vertical-align:middle;padding-right:10px;")
+							span.template-label Account Manager Daily Report
+								br
+								| #{rundate}
+						td.expander
+			br
+			table.container: tr: td.center(align="center", valign="top"): center
+				// content start
+				each salesmgr, i in EmailData.CorporateUser
+					table.row: tr: td.wrapper.last: table.twelve.columns: tr
+						td(style="background:#ebebeb; padding: 10px 10px 0px 10px;")
+							h5(style="color:#48c3b1; font-weight:bold")= salesmgr.name
+						td.expander
+					br
+					table.block-grid.four-up
+						tr
+							td: h6 Company
+							td: h6 Contact
+							td: h6 Title
+							td: h6 Note Action
+						- var clientcontact = (salesmgr.ClientContact.length) ? salesmgr.ClientContact: [salesmgr.ClientContact];
+						each client in clientcontact
+							- var notenode = (client.Note.length) ? client.Note[0] : client.Note;
+							- var corpnode = notenode.ClientCorporation;
+							tr
+								td
+									a(href="https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=#{corpnode.clientCorporationID}")
+										| #{corpnode.name}
+								td
+									a(href="https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientContact&id=#{client.userID}")
+										| #{client.name}
+								td= client.occupation
+								td= notenode.action
+			br
+			table.container: tr: td.center(align="center"): center
+				table.row.header: tr: td.wrapper.last
+					table.twelve.columns: tr
+						td(style="padding-bottom:25px; padding-top:15px; text-align:center; color:#fff")
+							|& copy; 2014 314e Corporation. All rights reserved.
+						td.expander
