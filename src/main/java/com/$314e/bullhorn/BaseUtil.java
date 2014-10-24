@@ -68,6 +68,15 @@ public class BaseUtil {
 		LOGGER.exit();
 	}
 
+	public void relogin() throws Exception {
+		// Setup BHRest API
+		final ObjectNode token = BHRestUtil.getRestToken((String) appConfig.getProperty("BH_CLIENT_ID"),
+				(String) appConfig.getProperty("BH_CLIENT_SECRET"), (String) appConfig.getProperty("BH_USER"),
+				(String) appConfig.getProperty("BH_PASSWORD"));
+		this.restToken = token.get("BhRestToken").asText();
+		this.entityApi = BHRestUtil.getEntityApi(token);
+	}
+
 	/**
 	 * Setup Gmail service
 	 * 
