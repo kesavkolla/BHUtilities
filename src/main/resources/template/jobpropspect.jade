@@ -19,7 +19,8 @@ html(xmlns="http://www.w3.org/1999/xhtml")
 			br
 			table.container: tr: td.center(align="center", valign="top"): center
 				// content start
-				each salesmgr, i in EmailData.CorporateUser
+				- var copUser = (EmailData.CorporateUser.length) ? EmailData.CorporateUser : [EmailData.CorporateUser];
+				each salesmgr, i in copUser
 					table.row: tr: td.wrapper.last: table.twelve.columns: tr
 						td(style="background:#ebebeb; padding: 10px 10px 0px 10px;")
 							h5(style="color:#48c3b1; font-weight:bold")= salesmgr.name
