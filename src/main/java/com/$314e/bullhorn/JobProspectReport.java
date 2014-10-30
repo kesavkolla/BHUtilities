@@ -162,7 +162,7 @@ public class JobProspectReport extends BaseUtil {
 
 		// Send email to recipients
 		final MimeMessage email = new MimeMessage(mailSession);
-		email.setSubject("Account Manager Report for date: " + runDate);
+		email.setSubject("Job Prospect Follow-Up Daily Report for date: " + runDate);
 		email.setFrom(appConfig.getString("mail.smtp.user"));
 		email.setContent(premailText, "text/html; charset=utf-8");
 
