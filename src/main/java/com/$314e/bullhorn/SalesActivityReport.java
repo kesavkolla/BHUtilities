@@ -109,7 +109,7 @@ public class SalesActivityReport extends BaseUtil {
 				.append(" ,ClientContact.name, Note.noteID, Note.action, Note.dateAdded")
 				.append(" FROM dbo.Note")
 				.append(" INNER JOIN dbo.CorporateUser ON CorporateUser.userID = Note.commentingPersonID")
-				.append(" INNER JOIN dbo.ClientContact ON ClientContact.userID = Note.personReferenceID AND ClientContact.status IN ('Key Manager', 'Key Contact')")
+				.append(" INNER JOIN dbo.ClientContact ON ClientContact.userID = Note.personReferenceID")
 				.append(" INNER JOIN dbo.ClientCorporation ON ClientCorporation.clientCorporationID = ClientContact.clientCorporationID")
 				.append(" WHERE Note.dateAdded BETWEEN {ts '").append(strPeriodStart).append("'} AND {ts '")
 				.append(strPeriodEnd).append("'}").append(" AND Note.commentingPersonID in (").append(mgrids)
