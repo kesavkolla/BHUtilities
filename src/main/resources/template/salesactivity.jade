@@ -1,0 +1,73 @@
+doctype strict
+html(xmlns="http://www.w3.org/1999/xhtml")
+	head
+		meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+		meta(name="viewport", content="width=device-width")
+		title Sales Activity Report
+		style(type="text/css"): include ink.css
+		style(type="text/css"): include custom.css
+	body
+		table.body: tr: td.center(align="center", valign="top"): center
+			table.container: tr: td.center(align="center", valign="top"): center
+				table.row.header: tr: td.wrapper.last
+					table.twelve.columns: tr
+						td(style="text-align:right; vertical-align:middle;padding-right:10px;")
+							span.template-label Sales Managers Activity Report
+								br
+								| #{rundate}
+						td.expander
+			br
+			table.container: tr: td.center(align="center", valign="top"): center
+				// content start
+				- var copUser = (EmailData.CorporateUser.length) ? EmailData.CorporateUser : [EmailData.CorporateUser];
+				each salesmgr, i in copUser
+					table.row.footer: tr: td.wrapper.last: table.twelve.columns: tr
+						td(style="background:#ebebeb; padding: 10px 10px 0px 10px;")
+							h5(style="color:#48c3b1; font-weight:bold")= salesmgr.name
+						td.expander
+					table.row.footer: tr
+						td.wrapper: table.seven.columns: tr
+							// Name should come here
+							td.left-text-pad(style="padding-top:10px")
+								h6(style="color:#636567; padding-bottom:10px") Company Activity
+								- var clientcorps = (salesmgr.ClientCorporation.length) ? salesmgr.ClientCorporation: [salesmgr.ClientCorporation];
+								table: tr: td
+									each clientcorp in clientcorps
+										p(style="color:#939597; font-size:11px")
+											strong
+												a(style="color:#48c3b1 !important;", href="https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=#{clientcorp.clientCorporationID}")
+													| #{clientcorp.name}
+											br
+											|Key Contacts: #{clientcorp.numContact}    Key Managers: #{clientcorp.numMgr}
+											br
+											- var notes = [];
+											- var clientcontacts = Array.isArray(clientcorp.ClientContact) ? clientcorp.ClientContact : [clientcorp.ClientContact];
+											- clientcontacts.each(function(item) { var note = Array.isArray(item.Note) ? item.Note : [item.Note]; notes.add(note);})
+											- var actions = notes.map(function(item) {return item.action;}).unique();
+											- var notecounts = {};
+											- actions.each(function(item) { var cnt = notes.count(function(nt) {return nt.action == item;}); notecounts[item] = cnt;});
+											each actcnt, action in notecounts
+												span
+													strong #{action}:  
+													|#{actcnt}
+												br
+							td.expander
+						td.wrapper.last: table.five.columns(style="background:#fff"): tr
+							td.last.right-text-pad(style="padding-top:10px")
+								h6(style="color:#636567; padding-bottom:10px") All Activity
+								-var allactivity = Array.isArray(salesmgr.AllActivity) ? salesmgr.AllActivity : [salesmgr.AllActivity];
+								table: tr: td
+									p(style="color:#939597; font-size:11px")
+										each activity in allactivity
+											span
+												strong #{activity.name.replace('_Note', ' Notes')}:  
+												|#{activity.cnt}
+											br
+							td.expander
+
+			table.container: tr: td.center(align="center"): center
+				table.row.header: tr: td.wrapper.last
+					table.twelve.columns: tr
+						td(style="padding-bottom:25px; padding-top:15px; text-align:center; color:#fff")
+							|& copy; 2014 314e Corporation. All rights reserved.
+						td.expander
