@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +81,7 @@ public class SalesActivityReport extends BaseUtil {
 			periodStart = LocalDate.parse(appConfig.getString("periodStart"), INPUT_DATE_FORMATTER);
 		} catch (final Throwable th) {
 		}
-		LocalDate periodEnd = LocalDate.now();
+		LocalDate periodEnd = periodStart;
 		try {
 			periodEnd = LocalDate.parse(appConfig.getString("periodEnd"), INPUT_DATE_FORMATTER);
 		} catch (final Throwable th) {
@@ -125,26 +126,31 @@ public class SalesActivityReport extends BaseUtil {
 
 			mgrData = convertXML2JSON(stmt, query.toString());
 			LOGGER.debug(mgrData);
-			final JSONArray users = mgrData.getJSONObject("EmailData").getJSONArray("CorporateUser");
-			for (int i = 0, len = users.length(); i < len; i++) {
-				final JSONObject corpUser = users.getJSONObject(i);
-				final String allquery = allactivityQuery.toString()
-						.replace("{userID}", "" + corpUser.getLong("userID"));
-				final JSONObject allactivity = convertXML2JSON(stmt, allquery);
-				if (allactivity == null) {
-					corpUser.put("AllActivity", new JSONArray());
-				} else {
-					if (allactivity.getJSONObject("AllActivity").get("activity") instanceof JSONObject) {
-						final JSONArray arr = new JSONArray();
-						arr.put(allactivity.getJSONObject("AllActivity").getJSONObject("activity"));
-						corpUser.put("AllActivity", arr);
+			if (mgrData == null) {
+				mgrData = new JSONObject("{EmailData:{CorporateUser:[]}}");
+			} else {
+				final JSONArray users = mgrData.getJSONObject("EmailData").getJSONArray("CorporateUser");
+				for (int i = 0, len = users.length(); i < len; i++) {
+					final JSONObject corpUser = users.getJSONObject(i);
+					final String allquery = allactivityQuery.toString().replace("{userID}",
+							"" + corpUser.getLong("userID"));
+					final JSONObject allactivity = convertXML2JSON(stmt, allquery);
+					if (allactivity == null) {
+						corpUser.put("AllActivity", new JSONArray());
 					} else {
-						corpUser.put("AllActivity", allactivity.getJSONObject("AllActivity").getJSONArray("activity"));
+						if (allactivity.getJSONObject("AllActivity").get("activity") instanceof JSONObject) {
+							final JSONArray arr = new JSONArray();
+							arr.put(allactivity.getJSONObject("AllActivity").getJSONObject("activity"));
+							corpUser.put("AllActivity", arr);
+						} else {
+							corpUser.put("AllActivity",
+									allactivity.getJSONObject("AllActivity").getJSONArray("activity"));
+						}
 					}
 				}
 			}
 		}
-		sendEmail(mgrData);
+		sendEmail(mgrData, periodStart, periodEnd);
 
 		LOGGER.exit();
 	}
@@ -203,7 +209,8 @@ public class SalesActivityReport extends BaseUtil {
 	 * @param emailData
 	 * @throws Exception
 	 */
-	private void sendEmail(final JSONObject emailData) throws Exception {
+	private void sendEmail(final JSONObject emailData, final LocalDate periodStart, final LocalDate periodEnd)
+			throws Exception {
 		LOGGER.entry(emailData);
 		final String runDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss"));
 		emailData.put("rundate", runDate);
@@ -228,7 +235,12 @@ public class SalesActivityReport extends BaseUtil {
 
 		// Send email to recipients
 		final MimeMessage email = new MimeMessage(mailSession);
-		email.setSubject("Sales Manager Activity Report for date: " + runDate);
+		if (Period.between(periodStart, periodEnd).getDays() != 0) {
+			email.setSubject("Sales Activity Report for period: " + periodStart.format(INPUT_DATE_FORMATTER) + " - "
+					+ periodEnd.format(INPUT_DATE_FORMATTER));
+		} else {
+			email.setSubject("Sales Activity Report for date: " + periodStart.format(INPUT_DATE_FORMATTER));
+		}
 		email.setFrom(appConfig.getString("mail.smtp.user"));
 		email.setContent(premailText, "text/html; charset=utf-8");
 

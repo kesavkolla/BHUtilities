@@ -12,14 +12,14 @@ html(xmlns="http://www.w3.org/1999/xhtml")
 				table.row.header: tr: td.wrapper.last
 					table.twelve.columns: tr
 						td(style="text-align:right; vertical-align:middle;padding-right:10px;")
-							span.template-label Sales Managers Activity Report
+							span.template-label Sales Activity Report
 								br
 								| #{rundate}
 						td.expander
 			br
 			table.container: tr: td.center(align="center", valign="top"): center
 				// content start
-				- var copUser = (EmailData.CorporateUser.length) ? EmailData.CorporateUser : [EmailData.CorporateUser];
+				- var copUser = Array.isArray(EmailData.CorporateUser) ? EmailData.CorporateUser : [EmailData.CorporateUser];
 				each salesmgr, i in copUser
 					table.row.footer: tr: td.wrapper.last: table.twelve.columns: tr
 						td(style="background:#ebebeb; padding: 10px 10px 0px 10px;")
@@ -30,7 +30,7 @@ html(xmlns="http://www.w3.org/1999/xhtml")
 							// Name should come here
 							td.left-text-pad(style="padding-top:10px")
 								h6(style="color:#636567; padding-bottom:10px") Company Activity
-								- var clientcorps = (salesmgr.ClientCorporation.length) ? salesmgr.ClientCorporation: [salesmgr.ClientCorporation];
+								- var clientcorps = Array.isArray(salesmgr.ClientCorporation) ? salesmgr.ClientCorporation: [salesmgr.ClientCorporation];
 								table: tr: td
 									each clientcorp in clientcorps
 										p(style="color:#939597; font-size:11px")
@@ -48,7 +48,7 @@ html(xmlns="http://www.w3.org/1999/xhtml")
 											- actions.each(function(item) { var cnt = notes.count(function(nt) {return nt.action == item;}); notecounts[item] = cnt;});
 											each actcnt, action in notecounts
 												span
-													strong #{action}:  
+													strong #{action} Notes:  
 													|#{actcnt}
 												br
 							td.expander
@@ -59,7 +59,8 @@ html(xmlns="http://www.w3.org/1999/xhtml")
 								table: tr: td
 									p(style="color:#939597; font-size:11px")
 										each activity in allactivity
-											span
+											- var lstyle = activity.name.indexOf('_Note')>-1 ? '' : 'color:#48c3b1;'
+											span(style="#{lstyle}")
 												strong #{activity.name.replace('_Note', ' Notes')}:  
 												|#{activity.cnt}
 											br
