@@ -24,7 +24,7 @@ buf.push("<table><tr><td>");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var clientcorp = $$obj[$index];
 
-buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=" + (clientcorp.clientCorporationID) + "", true, false)) + ">" + (jade.escape((jade_interp = clientcorp.name) == null ? '' : jade_interp)) + "</a></strong><br/>Key Contacts: " + (jade.escape((jade_interp = clientcorp.numContact) == null ? '' : jade_interp)) + "    Key Managers: " + (jade.escape((jade_interp = clientcorp.numMgr) == null ? '' : jade_interp)) + "<br/>");
+buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=" + (clientcorp.clientCorporationID) + "", true, false)) + ">" + (jade.escape((jade_interp = clientcorp.name) == null ? '' : jade_interp)) + "</a></strong><br/>Priority: " + (jade.escape((jade_interp = clientcorp.customText5) == null ? '' : jade_interp)) + "\nKey Contacts: " + (jade.escape((jade_interp = clientcorp.numContact) == null ? '' : jade_interp)) + "    Key Managers: " + (jade.escape((jade_interp = clientcorp.numMgr) == null ? '' : jade_interp)) + "<br/>");
 var notes = [];
 var clientcontacts = Array.isArray(clientcorp.ClientContact) ? clientcorp.ClientContact : [clientcorp.ClientContact];
 clientcontacts.each(function(item) { var note = Array.isArray(item.Note) ? item.Note : [item.Note]; notes.add(note);})
@@ -61,7 +61,7 @@ buf.push("</p>");
     for (var $index in $$obj) {
       $$l++;      var clientcorp = $$obj[$index];
 
-buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=" + (clientcorp.clientCorporationID) + "", true, false)) + ">" + (jade.escape((jade_interp = clientcorp.name) == null ? '' : jade_interp)) + "</a></strong><br/>Key Contacts: " + (jade.escape((jade_interp = clientcorp.numContact) == null ? '' : jade_interp)) + "    Key Managers: " + (jade.escape((jade_interp = clientcorp.numMgr) == null ? '' : jade_interp)) + "<br/>");
+buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=" + (clientcorp.clientCorporationID) + "", true, false)) + ">" + (jade.escape((jade_interp = clientcorp.name) == null ? '' : jade_interp)) + "</a></strong><br/>Priority: " + (jade.escape((jade_interp = clientcorp.customText5) == null ? '' : jade_interp)) + "\nKey Contacts: " + (jade.escape((jade_interp = clientcorp.numContact) == null ? '' : jade_interp)) + "    Key Managers: " + (jade.escape((jade_interp = clientcorp.numMgr) == null ? '' : jade_interp)) + "<br/>");
 var notes = [];
 var clientcontacts = Array.isArray(clientcorp.ClientContact) ? clientcorp.ClientContact : [clientcorp.ClientContact];
 clientcontacts.each(function(item) { var note = Array.isArray(item.Note) ? item.Note : [item.Note]; notes.add(note);})
@@ -142,7 +142,7 @@ buf.push("<table><tr><td>");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var clientcorp = $$obj[$index];
 
-buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=" + (clientcorp.clientCorporationID) + "", true, false)) + ">" + (jade.escape((jade_interp = clientcorp.name) == null ? '' : jade_interp)) + "</a></strong><br/>Key Contacts: " + (jade.escape((jade_interp = clientcorp.numContact) == null ? '' : jade_interp)) + "    Key Managers: " + (jade.escape((jade_interp = clientcorp.numMgr) == null ? '' : jade_interp)) + "<br/>");
+buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=" + (clientcorp.clientCorporationID) + "", true, false)) + ">" + (jade.escape((jade_interp = clientcorp.name) == null ? '' : jade_interp)) + "</a></strong><br/>Priority: " + (jade.escape((jade_interp = clientcorp.customText5) == null ? '' : jade_interp)) + "\nKey Contacts: " + (jade.escape((jade_interp = clientcorp.numContact) == null ? '' : jade_interp)) + "    Key Managers: " + (jade.escape((jade_interp = clientcorp.numMgr) == null ? '' : jade_interp)) + "<br/>");
 var notes = [];
 var clientcontacts = Array.isArray(clientcorp.ClientContact) ? clientcorp.ClientContact : [clientcorp.ClientContact];
 clientcontacts.each(function(item) { var note = Array.isArray(item.Note) ? item.Note : [item.Note]; notes.add(note);})
@@ -179,7 +179,7 @@ buf.push("</p>");
     for (var $index in $$obj) {
       $$l++;      var clientcorp = $$obj[$index];
 
-buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=" + (clientcorp.clientCorporationID) + "", true, false)) + ">" + (jade.escape((jade_interp = clientcorp.name) == null ? '' : jade_interp)) + "</a></strong><br/>Key Contacts: " + (jade.escape((jade_interp = clientcorp.numContact) == null ? '' : jade_interp)) + "    Key Managers: " + (jade.escape((jade_interp = clientcorp.numMgr) == null ? '' : jade_interp)) + "<br/>");
+buf.push("<p style=\"color:#939597; font-size:11px\"><strong><a style=\"color:#48c3b1 !important;\"" + (jade.attr("href", "https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=" + (clientcorp.clientCorporationID) + "", true, false)) + ">" + (jade.escape((jade_interp = clientcorp.name) == null ? '' : jade_interp)) + "</a></strong><br/>Priority: " + (jade.escape((jade_interp = clientcorp.customText5) == null ? '' : jade_interp)) + "\nKey Contacts: " + (jade.escape((jade_interp = clientcorp.numContact) == null ? '' : jade_interp)) + "    Key Managers: " + (jade.escape((jade_interp = clientcorp.numMgr) == null ? '' : jade_interp)) + "<br/>");
 var notes = [];
 var clientcontacts = Array.isArray(clientcorp.ClientContact) ? clientcorp.ClientContact : [clientcorp.ClientContact];
 clientcontacts.each(function(item) { var note = Array.isArray(item.Note) ? item.Note : [item.Note]; notes.add(note);})

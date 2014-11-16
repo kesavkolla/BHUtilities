@@ -38,6 +38,7 @@ html(xmlns="http://www.w3.org/1999/xhtml")
 												a(style="color:#48c3b1 !important;", href="https://cls5.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?Entity=ClientCorporation&id=#{clientcorp.clientCorporationID}")
 													| #{clientcorp.name}
 											br
+											|Priority: #{clientcorp.customText5}
 											|Key Contacts: #{clientcorp.numContact}    Key Managers: #{clientcorp.numMgr}
 											br
 											- var notes = [];

@@ -103,7 +103,7 @@ public class SalesActivityReport extends BaseUtil {
 		final StringBuilder query = new StringBuilder();
 		query.append("SELECT ")
 				.append(" CorporateUser.userID, CorporateUser.name, CorporateUser.email")
-				.append(" ,ClientCorporation.clientCorporationID, ClientCorporation.name")
+				.append(" ,ClientCorporation.clientCorporationID, ClientCorporation.name, ClientCorporation.customText5")
 				.append(" ,(SELECT COUNT(1) FROM ClientContact c WHERE c.clientCorporationID = ClientCorporation.clientCorporationID AND c.status = 'Key Manager') As numMgr")
 				.append(" ,(SELECT COUNT(1) FROM ClientContact c WHERE c.clientCorporationID = ClientCorporation.clientCorporationID AND c.status = 'Key Contact') As numContact")
 				.append(" ,ClientContact.name, Note.noteID, Note.action, Note.dateAdded")
