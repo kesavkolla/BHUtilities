@@ -132,8 +132,9 @@ public class SalesActivityReport extends BaseUtil {
 				final JSONArray users = mgrData.getJSONObject("EmailData").getJSONArray("CorporateUser");
 				for (int i = 0, len = users.length(); i < len; i++) {
 					final JSONObject corpUser = users.getJSONObject(i);
-					final String allquery = allactivityQuery.toString().replace("{userID}",
-							"" + corpUser.getLong("userID"));
+					final String allquery = allactivityQuery.toString()
+							.replace("{userID}", "" + corpUser.getLong("userID"))
+							.replace("{userName}", corpUser.getString("name"));
 					final JSONObject allactivity = convertXML2JSON(stmt, allquery);
 					if (allactivity == null) {
 						corpUser.put("AllActivity", new JSONArray());
@@ -193,6 +194,16 @@ public class SalesActivityReport extends BaseUtil {
 		allactivityQuery.append(" union all ").append("select 'Interview', count(*) from dbo.Appointment")
 				.append(" where dbo.Appointment.dateAdded between {ts '").append(strPeriodStart).append("'} and {ts '")
 				.append(strPeriodEnd).append("'}").append(" and ownerID={userID}");
+
+		// Placements
+		allactivityQuery.append(" union all ").append("select 'Placement', count(*) from dbo.Placement")
+				.append(" where Placement.dateAdded between {ts '").append(strPeriodStart).append("'} and {ts '")
+				.append(strPeriodEnd).append("'}").append(" and correlatedCustomText2 like '%{userName}%'");
+
+		// Job Activity
+		allactivityQuery.append(" union all ").append("select 'Jobs', count(*) from dbo.JobOrder")
+				.append(" where JobOrder.dateAdded between {ts '").append(strPeriodStart).append("'} and {ts '")
+				.append(strPeriodEnd).append("'}").append(" and ownerID = {userID}");
 
 		// Notes
 		allactivityQuery.append(" union all ").append("select Note.action+'_Note', count(*) from dbo.Note")
