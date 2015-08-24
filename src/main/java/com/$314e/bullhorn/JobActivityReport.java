@@ -183,7 +183,7 @@ public class JobActivityReport extends BaseUtil {
 	 */
 	private void sendEmail(final ArrayNode emailData) throws Exception {
 		LOGGER.entry(emailData);
-		final String runDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss"));
+		final String runDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy hh:mm a"));
 		final ObjectNode inputNode = JsonNodeFactory.instance.objectNode();
 		inputNode.put("emaildata", emailData);
 		inputNode.put("rundate", runDate);
